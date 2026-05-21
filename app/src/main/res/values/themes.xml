@@ -1,9 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.BANHANG" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <style name="Theme.BANHANG"
+        parent="Theme.Material3.Light.NoActionBar">
+
+        <!-- PRIMARY -->
+        <item name="colorPrimary">@color/primary</item>
+
+        <item name="colorPrimaryContainer">
+            @color/primary_light
+        </item>
+
+        <!-- BACKGROUND -->
+        <item name="android:windowBackground">
+            @color/background
+        </item>
+
+        <!-- STATUS BAR -->
+        <item name="android:statusBarColor">
+            @color/background
+        </item>
+
+        <!-- NAVIGATION BAR -->
+        <item name="android:navigationBarColor">
+            @color/background
+        </item>
+
+        <!-- TEXT -->
+        <item name="android:textColor">
+            @color/text_primary
+        </item>
+
+        <!-- BUTTON -->
+        <item name="materialButtonStyle">
+            @style/PrimaryButtonStyle
+        </item>
+
+        <!-- CARD -->
+        <item name="cardViewStyle">
+            @style/MyCardStyle
+        </item>
+
     </style>
 
-    <style name="Theme.BANHANG" parent="Base.Theme.BANHANG" />
 </resources>

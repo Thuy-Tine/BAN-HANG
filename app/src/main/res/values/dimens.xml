@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Padding -->
+    <dimen name="padding_screen">16dp</dimen>
+
+    <!-- Radius -->
+    <dimen name="radius_small">8dp</dimen>
+    <dimen name="radius_medium">12dp</dimen>
+    <dimen name="radius_large">20dp</dimen>
+
+    <!-- Elevation -->
+    <dimen name="card_elevation">2dp</dimen>
+
+</resources>

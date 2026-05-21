@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
+    <!-- PRIMARY -->
+    <color name="primary">#5A6E5A</color>
+    <color name="primary_dark">#4C5E4C</color>
+    <color name="primary_light">#A8B5A8</color>
+
+    <!-- BACKGROUND -->
+    <color name="background">#F5F5F0</color>
+
+    <!-- GOLD -->
+    <color name="tertiary">#D4AF37</color>
+
+    <!-- TEXT -->
+    <color name="text_primary">#3F443F</color>
+    <color name="text_secondary">#777775</color>
+
+    <!-- CARD -->
+    <color name="card_background">#FFFFFF</color>
+
+    <!-- BORDER -->
+    <color name="border">#D9D9D4</color>
+
+    <!-- ERROR -->
+    <color name="error">#C62828</color>
+
+    <!-- BASIC -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
 </resources>

@@ -28,5 +28,5 @@
     <!-- BASIC -->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-
+    <color name="hint">#B9B9B2</color>
 </resources>

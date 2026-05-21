@@ -12,9 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BANHANG">
 
-        <!-- Forgot Password -->
+        <!-- Login (màn hình đầu tiên nếu muốn login trước) -->
         <activity
-            android:name=".activity.ForgotPasswordActivity"
+            android:name=".activity.LoginActivity"
             android:exported="false" />
 
         <!-- Register -->
@@ -22,9 +22,14 @@
             android:name=".activity.RegisterActivity"
             android:exported="false" />
 
-        <!-- Login (màn hình chính khi mở app) -->
+        <!-- Forgot Password -->
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".activity.ForgotPasswordActivity"
+            android:exported="false" />
+
+        <!-- Main -->
+        <activity
+            android:name=".activity.MainActivity"
             android:exported="true">
 
             <intent-filter>
@@ -33,11 +38,6 @@
             </intent-filter>
 
         </activity>
-
-        <!-- Main -->
-        <activity
-            android:name=".activity.MainActivity"
-            android:exported="false" />
 
     </application>
 

@@ -54,7 +54,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email"
+                android:text="Phone number"
                 android:textColor="@color/text_primary"
                 android:textSize="15sp"
                 android:textStyle="bold"
@@ -76,13 +76,13 @@
                     app:tint="@color/text_secondary"/>
 
                 <EditText
-                    android:id="@+id/edtEmail"
+                    android:id="@+id/edtSdt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="14dp"
                     android:background="@android:color/transparent"
-                    android:hint="Enter your email"
+                    android:hint="Enter your phone number"
                     android:textColorHint="@color/hint"
                     android:textColor="@color/text_primary"
                     android:textSize="16sp"/>
@@ -118,7 +118,9 @@
                     android:layout_alignParentEnd="true"
                     android:text="Forgot password?"
                     android:textColor="@color/primary"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp"
+                    android:clickable="true"
+                    android:focusable="true"/>
 
             </RelativeLayout>
 
@@ -164,7 +166,17 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/border"/>
-
+            <CheckBox
+                android:id="@+id/ckRemember"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="Remember login"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp"
+                android:buttonTint="@color/primary"
+                android:gravity="center"
+                android:layout_gravity="center"/>
             <!-- LOGIN BUTTON -->
 
             <com.google.android.material.button.MaterialButton
@@ -199,13 +211,16 @@
                 android:textSize="16sp"/>
 
             <TextView
+                android:id="@+id/txtRegister"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:text="Register now"
                 android:textColor="@color/primary"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"/>
 
         </LinearLayout>
 

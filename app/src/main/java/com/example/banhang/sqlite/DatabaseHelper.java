@@ -10,7 +10,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // DATABASE
     private static final String DATABASE_NAME = "TineCosmetic.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,7 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String CREATE_ACCOUNT_TABLE = "CREATE TABLE Account (" +
                 "account_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
 
-                "email TEXT UNIQUE NOT NULL, " +
+                "sdt TEXT UNIQUE NOT NULL, " +
 
                 "password TEXT NOT NULL, " +
 
@@ -258,7 +258,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO Role(role_name) VALUES('Admin')");
         db.execSQL("INSERT INTO Role(role_name) VALUES('Staff')");
         db.execSQL("INSERT INTO Role(role_name) VALUES('Customer')");
-
+        db.execSQL("INSERT INTO Account(sdt, password, role_id) VALUES ('0123456789', '123', 1)");
     }
 
     @Override

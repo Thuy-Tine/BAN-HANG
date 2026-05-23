@@ -28,13 +28,12 @@ public class AccountDAO {
 
     }
 
-    public boolean Register(Account acc){
+    public long Register(Account acc){
         ContentValues values = new ContentValues();
         values.put("sdt", acc.getSdt());
         values.put("password", acc.getPassword());
         values.put("role_id", 3);
-        long result = db.insert("Account", null, values);
-        return result != -1;
+        return db.insert("Account", null, values);
     }
 
     public boolean updatePassword(String sdt, String newPassword){

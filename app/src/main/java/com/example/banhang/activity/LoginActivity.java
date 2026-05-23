@@ -75,8 +75,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 savePreferences();
 
-                // startActivity(new Intent(this, MainActivity.class));
-                // finish();
+                 startActivity(new Intent(this, ProductActivity.class));
+                finish();
 
             } else {
                 Toast.makeText(this,

@@ -1,20 +1,28 @@
 package com.example.banhang.sqlite;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // DATABASE
     private static final String DATABASE_NAME = "TineCosmetic.db";
-    private static final int DATABASE_VERSION = 4;
-
+    private static final int DATABASE_VERSION = 6;
+    private final Context context;
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -259,6 +267,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO Role(role_name) VALUES('Staff')");
         db.execSQL("INSERT INTO Role(role_name) VALUES('Customer')");
         db.execSQL("INSERT INTO Account(sdt, password, role_id) VALUES ('0123456789', '123', 1)");
+        loadDataFromCSV(db);
     }
 
     @Override
@@ -288,5 +297,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         onCreate(db);
 
+    }
+
+
+    private void loadDataFromCSV(SQLiteDatabase db) {
+        try {
+            InputStream is = context.getAssets().open("products.csv");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            reader.readLine(); // Bỏ qua dòng tiêu đề
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 7) {
+                    ContentValues values = new ContentValues();
+                    values.put("category_id", Integer.parseInt(parts[0].trim()));
+                    values.put("brand_id", Integer.parseInt(parts[1].trim()));
+                    values.put("product_name", parts[2].trim());
+                    values.put("description", parts[3].trim());
+                    values.put("price", Double.parseDouble(parts[4].trim()));
+                    values.put("stock", Integer.parseInt(parts[5].trim()));
+                    values.put("thumbnail", parts[6].trim()); // Link URL
+                    db.insert("Product", null, values);
+                }
+            }
+            reader.close();
+        } catch (Exception e) {
+            Log.e("DB_ERROR", "Lỗi đọc file CSV: " + e.getMessage());
+        }
     }
 }

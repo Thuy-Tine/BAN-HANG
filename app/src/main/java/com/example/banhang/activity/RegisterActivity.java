@@ -11,16 +11,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.banhang.R;
 import com.example.banhang.model.Account;
 import com.example.banhang.sqlite.AccountDAO;
+import com.example.banhang.sqlite.UserDAO;
 import com.google.android.material.button.MaterialButton;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText etFullName, etEmail, etPassword, etConfirmPassword;
+    private EditText etFullName, etEmail, etPhone, etPassword, etConfirmPassword;
     private MaterialButton btnRegister;
     private TextView tvSignIn;
     private ImageView imgBack;
 
     private AccountDAO accountDAO;
+    private UserDAO userDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,66 +30,70 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         initViews();
-        accountDAO = new AccountDAO(this);
         setEvents();
     }
 
     private void initViews() {
         etFullName = findViewById(R.id.etFullName);
-        etEmail = findViewById(R.id.etEmail);
+        etPhone = findViewById(R.id.etPhone);
         etPassword = findViewById(R.id.etPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         btnRegister = findViewById(R.id.btnRegister);
         tvSignIn = findViewById(R.id.tvSignIn);
         imgBack = findViewById(R.id.imgBack);
+
+        accountDAO = new AccountDAO(this);
+        userDAO = new UserDAO(this);
     }
 
     private void setEvents() {
-        // Back button event
+
         imgBack.setOnClickListener(v -> finish());
 
-        // Navigate to Sign In screen event
+
         tvSignIn.setOnClickListener(v -> finish());
 
-        // Handle account registration event
+
         btnRegister.setOnClickListener(v -> handleRegister());
     }
 
     private void handleRegister() {
         String fullName = etFullName.getText().toString().trim();
-        String emailOrPhone = etEmail.getText().toString().trim();
+        String phone = etPhone.getText().toString().trim(); // Phone là tài khoản chính
         String password = etPassword.getText().toString().trim();
         String confirmPassword = etConfirmPassword.getText().toString().trim();
 
-        // Check for empty input fields
-        if (fullName.isEmpty() || emailOrPhone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+        // Kiểm tra các trường bắt buộc không được để trống
+        if (fullName.isEmpty() || phone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Check if confirm password matches
+        // Kiểm tra mật khẩu xác nhận
         if (!password.equals(confirmPassword)) {
             Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Check if phone number/email already exists in the database
-        if (accountDAO.checkPhoneExists(emailOrPhone)) {
-            Toast.makeText(this, "Account already exists", Toast.LENGTH_SHORT).show();
+        // Kiểm tra số điện thoại đã tồn tại trong database chưa
+        if (accountDAO.checkPhoneExists(phone)) {
+            Toast.makeText(this, "Phone number already registered", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Create a new Account object and assign values
+        // Tạo đối tượng Account mới
         Account account = new Account();
-        account.setSdt(emailOrPhone);
+        account.setSdt(phone);
         account.setPassword(password);
 
-        // Call the registration function to save in SQLite
-        boolean isSuccess = accountDAO.Register(account);
+        long accountId = accountDAO.Register(account);
 
-        if (isSuccess) {
+        if (accountId != -1) {
+
+            userDAO.insertInitialUser(accountId, fullName, phone);
+
             Toast.makeText(this, "Account registered successfully!", Toast.LENGTH_SHORT).show();
-            finish();
+            finish(); // Quay lại trang Login
         } else {
             Toast.makeText(this, "Registration failed. Please try again.", Toast.LENGTH_SHORT).show();
         }

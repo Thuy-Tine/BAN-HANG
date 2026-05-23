@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    app:cardBackgroundColor="#FBF9F6"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
+    app:strokeColor="#E4E2DF"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvOrderId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="#AL-1024"
+                    android:textColor="#425643"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvOrderDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="May 15, 2024"
+                    android:textColor="#747871"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvOrderStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="#D2E9D0"
+                android:letterSpacing="0.05"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:text="DELIVERED"
+                android:textColor="#0E1F10"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="0dp"
+                app:strokeColor="#F5F5F0"
+                app:strokeWidth="1dp">
+
+                <ImageView
+                    android:id="@+id/imgOrderThumb"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@android:drawable/ic_menu_gallery" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tvOrderItemCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="2 items"
+                android:textColor="#5D5F5B"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="#E4E2DF" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvOrderTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="$120.00"
+                android:textColor="#425643"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/btnViewDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="View Details"
+                    android:textColor="#5A6E5A"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="4dp"
+                    android:src="@android:drawable/ic_media_next"
+                    app:tint="#5A6E5A" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

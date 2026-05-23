@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,34 +13,39 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BANHANG">
-
-        <!-- Login (màn hình đầu tiên nếu muốn login trước) -->
+        <activity
+            android:name=".activity.OrderHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.CheckoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.CartActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ProductActivity"
+            android:exported="false" /> <!-- Login (màn hình đầu tiên nếu muốn login trước) -->
         <activity
             android:name=".activity.LoginActivity"
-            android:exported="false" />
-
-        <!-- Register -->
+            android:exported="false" /> <!-- Register -->
         <activity
             android:name=".activity.RegisterActivity"
-            android:exported="false" />
-
-        <!-- Forgot Password -->
+            android:exported="false" /> <!-- Forgot Password -->
         <activity
             android:name=".activity.ForgotPasswordActivity"
-            android:exported="false" />
-
-        <!-- Main -->
+            android:exported="false" /> <!-- Main -->
         <activity
             android:name=".activity.MainActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
     </application>
 
 </manifest>

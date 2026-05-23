@@ -39,27 +39,26 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.CartA
     private List<CartItem> cartList;
     private int currentCartId;
 
-    // Giả định ID của người dùng đang đăng nhập (Thực tế lấy từ SharedPreferences sau khi Login)
+
     private final int CURRENT_USER_ID = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cart); // Liên kết với file activity_cart.xml
+        setContentView(R.layout.activity_cart);
 
-        // 1. Ánh xạ các View từ XML
         initViews();
 
-        // 2. Khởi tạo đối tượng Database DAO
+
         cartDAO = new CartDAO(this);
 
-        // 3. Thiết lập RecyclerView và Adapter
+
         setupRecyclerView();
 
-        // 4. Cài đặt các sự kiện Click cho nút bấm trên Activity
+
         setupActivityEvents();
 
-        // 5. Tải dữ liệu giỏ hàng từ SQLite lên giao diện
+
         loadCartData();
     }
 

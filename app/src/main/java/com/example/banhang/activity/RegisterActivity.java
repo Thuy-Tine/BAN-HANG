@@ -86,16 +86,16 @@ public class RegisterActivity extends AppCompatActivity {
         account.setSdt(phone);
         account.setPassword(password);
 
+        // Trong RegisterActivity.java, hàm handleRegister()
         long accountId = accountDAO.Register(account);
-
         if (accountId != -1) {
-
-            userDAO.insertInitialUser(accountId, fullName, phone);
-
-            Toast.makeText(this, "Account registered successfully!", Toast.LENGTH_SHORT).show();
-            finish(); // Quay lại trang Login
-        } else {
-            Toast.makeText(this, "Registration failed. Please try again.", Toast.LENGTH_SHORT).show();
+            boolean userInserted = userDAO.insertInitialUser(accountId, fullName, phone);
+            if(userInserted) {
+                Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Toast.makeText(this, "Lỗi tạo thông tin người dùng", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

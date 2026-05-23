@@ -63,15 +63,15 @@ public class UserDAO {
         }
     }
 
+    // Sửa trong UserDAO.java
     public boolean insertInitialUser(long accountId, String fullName, String phone) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put("account_id", (int) accountId);
         values.put("full_name", fullName);
         values.put("phone", phone);
-        // address, avatar, gender tạm thời để null, user cập nhật sau ở Profile
 
+        // Sử dụng db.insert với kiểm tra lỗi
         long result = db.insert("User", null, values);
         return result != -1;
     }

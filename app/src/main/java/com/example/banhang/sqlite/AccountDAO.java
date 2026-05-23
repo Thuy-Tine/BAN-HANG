@@ -18,14 +18,15 @@ public class AccountDAO {
 
     }
 
-    public boolean CheckLogin(String sdt, String password ){
-        Cursor curso = db.rawQuery("SELECT * FROM Account WHERE sdt = ? AND password = ?",
+
+    public boolean CheckLogin(String sdt, String password) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase(); // Dùng readable để tối ưu
+        Cursor cursor = db.rawQuery("SELECT * FROM Account WHERE sdt = ? AND password = ?",
                 new String[]{sdt, password});
 
-        boolean success = curso.getCount() > 0;
-        curso.close();
+        boolean success = cursor.getCount() > 0;
+        cursor.close();
         return success;
-
     }
 
     public long Register(Account acc){

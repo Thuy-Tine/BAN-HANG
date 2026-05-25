@@ -51,7 +51,7 @@ public class UserDAO {
             int rows = db.update("User", values, "user_id = ?", new String[]{String.valueOf(userId)});
             return rows > 0;
         } else {
-            // 3. Nếu chưa tồn tại (bảng đang trống), tiến hành INSERT dòng mới
+
             // Gán các thông tin mặc định ban đầu để tránh bảng bị thiếu dữ liệu
             values.put("user_id", userId);
             values.put("account_id", 1); // Liên kết với tài khoản mặc định
@@ -63,7 +63,7 @@ public class UserDAO {
         }
     }
 
-    // Sửa trong UserDAO.java
+
     public boolean insertInitialUser(long accountId, String fullName, String phone) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -71,8 +71,21 @@ public class UserDAO {
         values.put("full_name", fullName);
         values.put("phone", phone);
 
-        // Sử dụng db.insert với kiểm tra lỗi
+
         long result = db.insert("User", null, values);
         return result != -1;
+    }
+    public int getUserIdByPhone(String phone) {
+        android.database.sqlite.SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT u.user_id FROM User u " +
+                "INNER JOIN Account a ON u.account_id = a.account_id " +
+                "WHERE a.sdt = ?";
+        android.database.Cursor cursor = db.rawQuery(query, new String[]{phone});
+        int userId = -1;
+        if (cursor.moveToFirst()) {
+            userId = cursor.getInt(0);
+        }
+        cursor.close();
+        return userId;
     }
 }

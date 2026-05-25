@@ -59,7 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void handleRegister() {
         String fullName = etFullName.getText().toString().trim();
-        String phone = etPhone.getText().toString().trim(); // Phone là tài khoản chính
+        String phone = etPhone.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
         String confirmPassword = etConfirmPassword.getText().toString().trim();
 

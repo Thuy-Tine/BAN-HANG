@@ -42,7 +42,6 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Checko
             holder.tvCheckoutProductName.setText(item.getProduct().getProductName());
             holder.tvCheckoutProductPrice.setText(String.format(Locale.US, "$%.2f", item.getProduct().getPrice()));
 
-            // Xử lý Category tĩnh (Hoặc lấy từ DB nếu Product model có chứa Category Name)
             String categoryName = "Cosmetic";
             if (item.getProduct().getCategoryId() == 1) categoryName = "Skincare";
             else if (item.getProduct().getCategoryId() == 2) categoryName = "Makeup";

@@ -48,13 +48,12 @@ public class CartDAO {
     public List<CartItem> getCartItems(int cartId) {
         List<CartItem> list = new ArrayList<>();
 
-        // Join 2 bảng để lấy quantity từ CartItem và thông tin từ Product
+        // Sửa câu truy vấn tại hàm getCartItems
         String query = "SELECT ci.cart_item_id, ci.cart_id, ci.product_id, ci.quantity, " +
                 "p.product_name, p.price, p.thumbnail, p.category_id " +
                 "FROM CartItem ci " +
-                "INNER JOIN Product p ON ci.product_id = p.product_id " +
+                "LEFT JOIN Product p ON ci.product_id = p.product_id " + // Dùng LEFT JOIN
                 "WHERE ci.cart_id = ?";
-
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(cartId)});
 
         if (cursor != null) {

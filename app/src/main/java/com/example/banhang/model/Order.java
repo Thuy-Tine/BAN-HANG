@@ -6,7 +6,7 @@ public class Order {
     private String status;
     private String orderDate;
 
-    // Các trường bổ sung để hiển thị UI
+
     private int itemCount;
     private String thumbnail;
 

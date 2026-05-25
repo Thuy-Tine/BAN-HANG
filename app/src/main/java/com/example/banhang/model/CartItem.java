@@ -3,14 +3,13 @@ package com.example.banhang.model;
 import java.io.Serializable;
 
 public class CartItem implements Serializable {
-    // Các cột thực tế trong bảng CartItem của Database
+
     private int cartItemId;
     private int cartId;
     private int productId;
-    private int quantity; // Mặc định là 1 theo SQL của em
+    private int quantity;
 
-    // Đối tượng mở rộng để hứng dữ liệu khi JOIN với bảng Product
-    // Giúp em dễ dàng gọi: cartItem.getProduct().getProductName() trên giao diện
+
     private Product product;
 
     public CartItem() {}

@@ -1,5 +1,7 @@
 package com.example.banhang.activity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -25,18 +27,33 @@ public class OrderHistoryActivity extends AppCompatActivity {
     private OrderHistoryAdapter adapter;
     private List<Order> orderList;
 
-    private final int CURRENT_USER_ID = 1; // Fix cứng để test
+
+    private int currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_history);
 
+
+        SharedPreferences sessionPref = getSharedPreferences("USER_SESSION", MODE_PRIVATE);
+        currentUserId = sessionPref.getInt("current_user_id", -1);
+
+        // Kiểm tra an toàn, nếu chưa đăng nhập hoặc mất session thì quay về Login
+        if (currentUserId == -1) {
+            Intent intent = new Intent(OrderHistoryActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+
         initViews();
         setupRecyclerView();
         setupEvents();
 
-        // Load mặc định tất cả đơn hàng khi vừa mở trang
+
         loadOrdersByFilter("All");
     }
 
@@ -66,7 +83,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
 
         chipProcessing.setOnClickListener(v -> {
             updateChipUI(chipProcessing);
-            loadOrdersByFilter("Pending"); // Trong DB lưu là Pending
+            loadOrdersByFilter("Pending");
         });
 
         chipCompleted.setOnClickListener(v -> {
@@ -82,7 +99,8 @@ public class OrderHistoryActivity extends AppCompatActivity {
 
     private void loadOrdersByFilter(String status) {
         orderList.clear();
-        orderList.addAll(orderDAO.getOrderHistory(CURRENT_USER_ID, status));
+        // Truyền currentUserId động vào truy vấn
+        orderList.addAll(orderDAO.getOrderHistory(currentUserId, status));
         adapter.notifyDataSetChanged();
     }
 

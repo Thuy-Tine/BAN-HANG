@@ -46,4 +46,41 @@ public class ProductDAO {
         }
         return list;
     }
+
+    @SuppressLint("Range")
+    public List<Product> searchProducts(String keyword) {
+        List<Product> list = new ArrayList<>();
+
+        // Sử dụng LEFT JOIN để kết hợp bảng Product và Brand
+        // Toán tử LIKE '%keyword%' giúp tìm kiếm chuỗi chứa từ khóa ở bất kỳ vị trí nào
+        String query = "SELECT p.* FROM Product p " +
+                "LEFT JOIN Brand b ON p.brand_id = b.brand_id " +
+                "WHERE p.product_name LIKE ? OR b.brand_name LIKE ? " +
+                "ORDER BY p.created_at DESC";
+
+        String searchPattern = "%" + keyword + "%";
+
+        // Truyền tham số an toàn để chống SQL Injection
+        Cursor cursor = db.rawQuery(query, new String[]{searchPattern, searchPattern});
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Product p = new Product();
+                    p.setProductId(cursor.getInt(cursor.getColumnIndex("product_id")));
+                    p.setCategoryId(cursor.getInt(cursor.getColumnIndex("category_id")));
+                    p.setBrandId(cursor.getInt(cursor.getColumnIndex("brand_id")));
+                    p.setProductName(cursor.getString(cursor.getColumnIndex("product_name")));
+                    p.setDescription(cursor.getString(cursor.getColumnIndex("description")));
+                    p.setPrice(cursor.getDouble(cursor.getColumnIndex("price")));
+                    p.setStock(cursor.getInt(cursor.getColumnIndex("stock")));
+                    p.setThumbnail(cursor.getString(cursor.getColumnIndex("thumbnail")));
+                    p.setCreatedAt(cursor.getString(cursor.getColumnIndex("created_at")));
+                    list.add(p);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        }
+        return list;
+    }
 }

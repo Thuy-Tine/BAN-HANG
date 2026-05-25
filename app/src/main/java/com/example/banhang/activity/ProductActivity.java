@@ -27,7 +27,7 @@ public class ProductActivity extends AppCompatActivity {
     private ProductDAO productDAO;
     private ProductAdapter productAdapter;
     private int currentCategoryId = -1; //
-
+    private android.widget.EditText edtSearch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,13 +48,15 @@ public class ProductActivity extends AppCompatActivity {
         rvProducts = findViewById(R.id.rvProducts);
 
         navHome = findViewById(R.id.navHome);
-
+        edtSearch = findViewById(R.id.edtSearch);
         navCart = findViewById(R.id.navCart);
         navProfile = findViewById(R.id.navProfile);
     }
 
     // Trong ProductActivity.java
     private void setupRecyclerView() {
+
+        rvProducts.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 2));
 
         productAdapter = new ProductAdapter(this,
                 product -> { /* Click xem chi tiết */ },
@@ -105,7 +107,23 @@ public class ProductActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        edtSearch.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String keyword = s.toString().trim();
+                if (keyword.isEmpty()) {
+                    loadData();
+                } else {
+                    productAdapter.setProducts(productDAO.searchProducts(keyword));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(android.text.Editable s) {}
+        });
 
 
 

@@ -53,7 +53,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Gắn layout truyền thống
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_item_product, parent, false);
         return new ProductViewHolder(view);
     }
@@ -99,7 +99,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
             tvProductName = itemView.findViewById(R.id.tvProductName);
             tvProductPrice = itemView.findViewById(R.id.tvProductPrice);
-            tvProductCategory = itemView.findViewById(R.id.tvProductCategory); // Bổ sung text Category
+            tvProductCategory = itemView.findViewById(R.id.tvProductCategory);
 
 
             ivProduct = itemView.findViewById(R.id.imgProduct);

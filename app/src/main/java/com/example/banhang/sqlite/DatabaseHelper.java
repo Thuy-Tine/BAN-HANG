@@ -16,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // DATABASE
     private static final String DATABASE_NAME = "TineCosmetic.db";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 9;
     private final Context context;
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

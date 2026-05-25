@@ -1,6 +1,7 @@
 package com.example.banhang.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,7 +24,7 @@ import java.util.Locale;
 
 public class CartActivity extends AppCompatActivity implements CartAdapter.CartActionListener {
 
-    // Khai báo các View theo kiểu truyền thống
+
     private ImageButton btnBack;
     private TextView tvHeaderTitle;
     private RecyclerView rvCartItems;
@@ -39,26 +40,31 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.CartA
     private List<CartItem> cartList;
     private int currentCartId;
 
-
-    private final int CURRENT_USER_ID = 1;
+    private int currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
+
+        SharedPreferences sessionPref = getSharedPreferences("USER_SESSION", MODE_PRIVATE);
+        currentUserId = sessionPref.getInt("current_user_id", -1);
+
+
+        if (currentUserId == -1) {
+            Intent intent = new Intent(CartActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+
         initViews();
-
-
         cartDAO = new CartDAO(this);
-
-
         setupRecyclerView();
-
-
         setupActivityEvents();
-
-
         loadCartData();
     }
 
@@ -71,14 +77,13 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.CartA
         tvSubtotal = findViewById(R.id.tvSubtotal);
         tvTotal = findViewById(R.id.tvTotal);
         btnCheckout = findViewById(R.id.btnCheckout);
-        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
         findViewById(R.id.btnOrderHistory).setOnClickListener(v -> {
             Intent intent = new Intent(CartActivity.this, OrderHistoryActivity.class);
             startActivity(intent);
         });
-
 
         btnCheckout.setOnClickListener(v -> {
             if (cartList == null || cartList.isEmpty()) {
@@ -128,10 +133,10 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.CartA
     }
 
     private void loadCartData() {
-        // Lấy hoặc tự động tạo ID giỏ hàng cho User hiện tại từ Database
-        currentCartId = cartDAO.getOrCreateCartId(CURRENT_USER_ID);
 
-        // Lấy danh sách sản phẩm nằm trong giỏ hàng này
+        currentCartId = cartDAO.getOrCreateCartId(currentUserId);
+
+
         List<CartItem> itemsFromDb = cartDAO.getCartItems(currentCartId);
 
         // Cập nhật vào danh sách hiển thị của Adapter
@@ -167,8 +172,6 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.CartA
     // =========================================================================
     // CÁC HÀM OVERRIDE XỬ LÝ SỰ KIỆN TỪ CARTADAPTER (NHẬN TỪ NÚT TĂNG/GIẢM/XÓA)
     // =========================================================================
-
-    // Trong CartActivity.java
 
     @Override
     public void onIncreaseQuantity(CartItem item, int position) {

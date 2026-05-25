@@ -5,12 +5,13 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp">
 
+    <!-- IMAGE -->
     <androidx.cardview.widget.CardView
         android:id="@+id/imgContainer"
         android:layout_width="96dp"
-        android:layout_height="128dp"
+        android:layout_height="96dp"
         app:cardBackgroundColor="#E4E2DF"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="8dp"
         app:cardElevation="0dp">
 
         <ImageView
@@ -19,109 +20,111 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_gallery" />
+
     </androidx.cardview.widget.CardView>
 
-    <LinearLayout
+    <!-- CONTENT -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="128dp"
+        android:layout_height="96dp"
         android:layout_marginStart="16dp"
-        android:layout_toEndOf="@id/imgContainer"
-        android:orientation="vertical">
+        android:layout_toEndOf="@id/imgContainer">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- REMOVE -->
+        <ImageButton
+            android:id="@+id/btnRemoveItem"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="#888888" />
+
+        <!-- PRODUCT NAME -->
+        <TextView
+            android:id="@+id/tvCartProductName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/btnRemoveItem"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="Product Name"
+            android:textColor="#1B1C1A"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+        <!-- DESCRIPTION -->
+        <TextView
+            android:id="@+id/tvCartProductDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvCartProductName"
+            android:layout_marginTop="4dp"
+            android:text="Volume: 30ml"
+            android:textColor="#777777"
+            android:textSize="13sp" />
 
-                <TextView
-                    android:id="@+id/tvCartProductName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Product Name"
-                    android:textColor="#1B1C1A"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:maxLines="2"
-                    android:ellipsize="end"/>
+        <!-- QUANTITY -->
+        <LinearLayout
+            android:id="@+id/layoutQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/btnRemoveItem"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_quantity_outline"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="4dp">
 
-                <TextView
-                    android:id="@+id/tvCartProductDesc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Volume: 30ml"
-                    android:textColor="#434842"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <ImageButton
-                android:id="@+id/btnRemoveItem"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/ic_menu_close_clear_cancel"
-                app:tint="#747871" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            <!-- MINUS -->
             <TextView
-                android:id="@+id/tvCartProductPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:text="$0.00"
-                android:textColor="#425643"
-                android:textSize="16sp"
+                android:id="@+id/btnDecreaseQty"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                android:text="-"
+                android:textColor="#434842"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:background="@drawable/bg_quantity_outline"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+            <!-- QUANTITY -->
+            <TextView
+                android:id="@+id/tvQuantity"
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="#1B1C1A"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-                <ImageButton
-                    android:id="@+id/btnDecreaseQty"
-                    android:layout_width="28dp"
-                    android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@android:drawable/ic_menu_delete"
-                    app:tint="#434842" />
+            <!-- PLUS -->
+            <TextView
+                android:id="@+id/btnIncreaseQty"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                android:text="+"
+                android:textColor="#434842"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvQuantity"
-                    android:layout_width="24dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="1"
-                    android:textColor="#1B1C1A"
-                    android:textSize="14sp" />
+        </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/btnIncreaseQty"
-                    android:layout_width="28dp"
-                    android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@android:drawable/ic_input_add"
-                    app:tint="#434842" />
-            </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
+        <!-- PRICE -->
+        <TextView
+            android:id="@+id/tvCartProductPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="$120.00"
+            android:textColor="#425643"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

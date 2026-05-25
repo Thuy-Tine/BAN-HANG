@@ -27,7 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
     private LinearLayout navHome, navShop, navCart, navProfile;
    TextView btnLogout;
     private UserDAO userDAO;
-    private final int CURRENT_USER_ID = 1; // ID giả định để truy vấn (Chỉnh sửa khi có Login)
+    private final int CURRENT_USER_ID = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
         User user = userDAO.getUserById(CURRENT_USER_ID);
 
         if (user != null) {
-            // Xử lý Null-safe cho tên và số điện thoại
+
             tvFullName.setText(user.getFullName() != null ? user.getFullName() : "Trần Thị Thủy Tiên");
             tvPhone.setText(user.getPhone() != null ? user.getPhone() : "No phone number");
 
@@ -79,7 +79,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setupEvents() {
-        // --- SỰ KIỆN MENU ---
+
         btnMenuOrderHistory.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, OrderHistoryActivity.class);
             startActivity(intent);
@@ -147,14 +147,14 @@ public class ProfileActivity extends AppCompatActivity {
         btnMenuAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 1. Lấy thông tin User hiện tại để lấy địa chỉ cũ
+
                 User user = userDAO.getUserById(CURRENT_USER_ID);
                 String currentAddress = "";
                 if (user != null && user.getAddress() != null) {
                     currentAddress = user.getAddress();
                 }
 
-                // 2. Tạo một EditText động để người dùng nhập liệu trực tiếp trên hộp thoại
+
                 final EditText etAddressInput = new EditText(ProfileActivity.this);
                 etAddressInput.setText(currentAddress);
                 etAddressInput.setHint("Enter your shipping address");

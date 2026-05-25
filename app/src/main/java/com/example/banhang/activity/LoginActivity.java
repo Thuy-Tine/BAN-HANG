@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.banhang.R;
 import com.example.banhang.sqlite.AccountDAO;
+import com.example.banhang.sqlite.UserDAO; // ĐÃ BỔ SUNG: Import UserDAO
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,8 +25,10 @@ public class LoginActivity extends AppCompatActivity {
     TextView txtForgotPassword, txtRegister;
 
     AccountDAO accountDAO;
+    UserDAO userDAO;
 
     String PREF_NAME = "LoginData";
+    String SESSION_NAME = "USER_SESSION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         initViews();
 
         accountDAO = new AccountDAO(this);
-
+        userDAO = new UserDAO(this);
         loadPreferences();
 
         setEvents();
@@ -54,37 +57,40 @@ public class LoginActivity extends AppCompatActivity {
 
     // ================= EVENTS =================
     private void setEvents() {
- //login
+        // LOGIN
         btnLogin.setOnClickListener(v -> {
 
             String phone = edtPhone.getText().toString().trim();
             String password = edtPassword.getText().toString().trim();
 
             if (phone.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this,
-                        "Please enter all fields",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please enter all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (accountDAO.CheckLogin(phone, password)) {
 
-                Toast.makeText(this,
-                        "Welcome to Tine Cosmetic!",
-                        Toast.LENGTH_SHORT).show();
+
+                int loggedUserId = userDAO.getUserIdByPhone(phone);
+
+
+                SharedPreferences sessionPref = getSharedPreferences(SESSION_NAME, MODE_PRIVATE);
+                sessionPref.edit().putInt("current_user_id", loggedUserId).apply();
+
+
+                Toast.makeText(this, "Welcome to Tine Cosmetic!", Toast.LENGTH_SHORT).show();
 
                 savePreferences();
 
-                 startActivity(new Intent(this, ProductActivity.class));
+                startActivity(new Intent(this, ProductActivity.class));
                 finish();
 
             } else {
-                Toast.makeText(this,
-                        "Incorrect phone number or password!",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Incorrect phone number or password!", Toast.LENGTH_SHORT).show();
             }
         });
-// forgot pasword
+
+        // FORGOT PASSWORD
         txtForgotPassword.setOnClickListener(v -> {
             startActivity(new Intent(this, ForgotPasswordActivity.class));
         });
@@ -97,15 +103,9 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-
-
-
-
     }
 
-    // ================= SAVE DATA =================
+    // ================= SAVE DATA (Ghi nhớ đăng nhập) =================
     private void savePreferences() {
 
         SharedPreferences sp = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    // ================= LOAD DATA =================
+    // ================= LOAD DATA (Tự động điền) =================
     private void loadPreferences() {
 
         SharedPreferences sp = getSharedPreferences(PREF_NAME, MODE_PRIVATE);

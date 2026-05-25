@@ -1,6 +1,7 @@
 package com.example.banhang.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -45,7 +46,10 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private int currentCartId;
     private double totalAmount = 0;
-    private final int CURRENT_USER_ID = 1;
+
+
+    private int currentUserId;
+
     private TextView tvCheckoutNamePhone, tvCheckoutAddress;
     private String userShippingAddress = "";
     private String userPhoneContact = "";
@@ -55,8 +59,23 @@ public class CheckoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
 
+
+        SharedPreferences sessionPref = getSharedPreferences("USER_SESSION", MODE_PRIVATE);
+        currentUserId = sessionPref.getInt("current_user_id", -1);
+
+
+        if (currentUserId == -1) {
+            Intent intent = new Intent(CheckoutActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+
         initViews();
         loadData();
+        loadUserInfo();
         setupEvents();
     }
 
@@ -77,7 +96,8 @@ public class CheckoutActivity extends AppCompatActivity {
         orderDAO = new OrderDAO(this);
         checkoutList = new ArrayList<>();
 
-        currentCartId = cartDAO.getOrCreateCartId(CURRENT_USER_ID);
+
+        currentCartId = cartDAO.getOrCreateCartId(currentUserId);
         checkoutList.addAll(cartDAO.getCartItems(currentCartId));
 
         checkoutAdapter = new CheckoutAdapter(this, checkoutList);
@@ -92,9 +112,11 @@ public class CheckoutActivity extends AppCompatActivity {
         }
         tvCheckoutTotal.setText(String.format(Locale.US, "$%.2f", totalAmount));
     }
+
     private void loadUserInfo() {
         UserDAO userDAO = new UserDAO(this);
-        User user = userDAO.getUserById(CURRENT_USER_ID);
+        // Lấy thông tin User chuẩn xác theo phiên đăng nhập
+        User user = userDAO.getUserById(currentUserId);
 
         if (user != null) {
             String name = user.getFullName() != null ? user.getFullName() : "Customer";
@@ -105,10 +127,11 @@ public class CheckoutActivity extends AppCompatActivity {
             if (user.getAddress() != null && !user.getAddress().trim().isEmpty()) {
                 userShippingAddress = user.getAddress();
                 tvCheckoutAddress.setText(userShippingAddress);
-                tvCheckoutAddress.setTextColor(android.graphics.Color.parseColor("#434842")); // Màu chữ xám đen bình thường
+                tvCheckoutAddress.setTextColor(android.graphics.Color.parseColor("#434842"));
             } else {
+                userShippingAddress = "";
                 tvCheckoutAddress.setText("Vui lòng cập nhật địa chỉ trong Profile!");
-                tvCheckoutAddress.setTextColor(android.graphics.Color.parseColor("#BA1A1A")); // Báo đỏ nếu chưa có địa chỉ
+                tvCheckoutAddress.setTextColor(android.graphics.Color.parseColor("#BA1A1A"));
             }
         }
     }
@@ -117,23 +140,20 @@ public class CheckoutActivity extends AppCompatActivity {
         rgPayment.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.rbQR) {
                 layoutQR.setVisibility(View.VISIBLE);
-
-                // Gọi hàm load ảnh QR khi layout hiển thị lên
                 loadVietQR();
-
             } else {
                 layoutQR.setVisibility(View.GONE);
             }
         });
 
         btnCompleteOrder.setOnClickListener(v -> {
-            if (checkoutList.isEmpty()) {
+            if (checkoutList == null || checkoutList.isEmpty()) {
                 Toast.makeText(this, "Your cart is empty!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // CHECK: Phải có địa chỉ mới cho thanh toán
-            if (userShippingAddress.isEmpty()) {
+
+            if (userShippingAddress == null || userShippingAddress.trim().isEmpty()) {
                 Toast.makeText(this, "Please set your shipping address in Profile first!", Toast.LENGTH_LONG).show();
                 return;
             }
@@ -142,7 +162,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
 
             boolean isSuccess = orderDAO.processCheckout(
-                    CURRENT_USER_ID,
+                    currentUserId,
                     currentCartId,
                     totalAmount,
                     userShippingAddress,
@@ -154,7 +174,6 @@ public class CheckoutActivity extends AppCompatActivity {
             if (isSuccess) {
                 Toast.makeText(this, "Order placed successfully!", Toast.LENGTH_LONG).show();
 
-
                 Intent intent = new Intent(CheckoutActivity.this, ProductActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -163,78 +182,19 @@ public class CheckoutActivity extends AppCompatActivity {
                 Toast.makeText(this, "Transaction failed. Please try again.", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
-        btnCompleteOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkoutList.isEmpty()) {
-                    Toast.makeText(CheckoutActivity.this, "Your cart is empty!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-
-                UserDAO userDAO = new UserDAO(CheckoutActivity.this);
-                User user = userDAO.getUserById(CURRENT_USER_ID);
-
-                String shippingAddress = "";
-                String phoneContact = "0987654321";
-
-                if (user != null && user.getAddress() != null && !user.getAddress().trim().isEmpty()) {
-                    shippingAddress = user.getAddress();
-                } else {
-
-                    Toast.makeText(CheckoutActivity.this, "Please set your shipping address in Profile first!", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-
-                String selectedMethod = rbQR.isChecked() ? "QR" : "COD";
-
-
-                boolean isSuccess = orderDAO.processCheckout(
-                        CURRENT_USER_ID,
-                        currentCartId,
-                        totalAmount,
-                        shippingAddress,
-                        phoneContact,
-                        selectedMethod,
-                        checkoutList
-                );
-
-                if (isSuccess) {
-                    Toast.makeText(CheckoutActivity.this, "Order placed successfully!", Toast.LENGTH_LONG).show();
-
-                    Intent intent = new Intent(CheckoutActivity.this, ProductActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(CheckoutActivity.this, "Transaction failed. Please try again.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
     }
 
     private void loadVietQR() {
-
         String bankId = "Agribank";
         String accountNo = "6706272170988";
-
-
         String accountName = Uri.encode("TINE COSMETIC");
         String addInfo = Uri.encode("Thanh toan don hang");
 
-
         int amountVND = (int) (totalAmount * 25000);
-
 
         String qrUrl = String.format(Locale.US,
                 "https://img.vietqr.io/image/%s-%s-print.png?amount=%d&addInfo=%s&accountName=%s",
                 bankId, accountNo, amountVND, addInfo, accountName);
-
 
         ImageView imgQRCode = findViewById(R.id.imgQRCode);
         Glide.with(this)
@@ -242,5 +202,4 @@ public class CheckoutActivity extends AppCompatActivity {
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .into(imgQRCode);
     }
-
 }
